@@ -47,8 +47,8 @@ python dashboard/build.py        # bundles the results for the dashboard
 
 Then open `dashboard/index.html` in a browser.
 
-The notebooks also run in Google Colab: open one from GitHub, then run
-`!git clone https://github.com/Kukyos/Watuh.git` and `%cd Watuh/notebooks` first.
+To run a notebook in Google Colab, start with `!git clone https://github.com/Kukyos/Watuh.git`
+and `%cd Watuh/notebooks`. Notebook 03 is the slowest (about 8 minutes on an 8-core laptop, longer on Colab's two cores).
 
 ## Data
 

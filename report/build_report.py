@@ -335,7 +335,7 @@ def chapter4(w):
     w.figure(FIG / "regression_tuning.png", "Choosing each method's setting on the validation years 2021–2022")
     w.para("A KNN prediction for every depth needs the same neighbours, because neighbours depend only on the inputs. "
            "The implementation therefore searches once and averages the neighbours' temperatures at each depth, "
-           "skipping neighbours with no water at that depth:")
+           "skipping neighbours with no water at that depth (so near the coast fewer than k may be averaged at deep levels):")
     w.code('''
 def average(self, dist, idx):
     w = (1 / np.maximum(dist, 1e-9))[..., None]    # closer neighbours count more
@@ -378,7 +378,7 @@ def chapter5(w):
              ["T2", "GLORYS value at each cast's cell and day equals the stored value", "No mismatch", f"{EXPORT['glorys_check']['mismatched']} mismatches in {EXPORT['glorys_check']['compared']:,} values ({EXPORT['glorys_check']['edge_casts_moved']} edge casts reassigned)"],
              ["T3", "Every course model predicts every scored point", "0 unpredicted", f"0 unpredicted of {pts:,}"],
              ["T4", "Heat potential and isotherm formulas on known profiles", "Analytic values", "Pass (self-check)"],
-             ["T5", "Leap days fold onto 365 day-of-year slots; JSON is valid in a browser (no NaN)", "Pass", "Pass"],
+             ["T5", "Self-checks: basin assignment, guide number filling, results file stays valid JSON for a browser (no NaN)", "Pass", "Pass"],
              ["T6", "Test years never used in training or tuning", "By construction", "Split by date; tuning on 2021–22 only"],
              ["T7", "Dashboard opens offline and every figure reads results.json", "No missing value", "Verified by rendering"]],
             "Test cases and results", widths=[1.0, 7.0, 3.5, 4.0])

@@ -58,9 +58,10 @@ print({k: len(v) for k, v in [("train", train), ("val", val), ("test", test), ("
 #
 # KNN is the exception to "one model per depth": a patch's nearest neighbours depend only
 # on the inputs, not on the depth being predicted, so one neighbour search serves all 15
-# depths. At each depth the neighbours without water there (shallow sea) are skipped.
-# The result is the same as 15 separate distance-weighted KNN regressors, at a fifteenth
-# of the cost.
+# depths. At each depth the neighbours without water there (shallow sea) are skipped, so
+# near the coast fewer than k neighbours may be averaged at the deeper levels. Apart from
+# that, it is the same as 15 separate distance-weighted KNN regressors, at a fifteenth of
+# the cost.
 
 # %%
 class KNNAllDepths:

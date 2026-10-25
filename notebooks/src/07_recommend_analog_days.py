@@ -95,7 +95,8 @@ cal = np.array(cal)
 rmse_cal = sub_rmse(query[:, None], cal)
 
 # Relevance for precision@5: among all history days, the 5% most similar below the surface.
-all_rmse = sub_rmse(query[:, None], history[None, :])
+# 20 query days at a time: all at once would hold queries × history × cells numbers (about 14 GB).
+all_rmse = np.concatenate([sub_rmse(query[i:i + 20, None], history[None, :]) for i in range(0, len(query), 20)])
 cut = np.percentile(all_rmse, 5, axis=1, keepdims=True)
 relevant = lambda r: (r <= cut).mean()
 evalt = pd.DataFrame({

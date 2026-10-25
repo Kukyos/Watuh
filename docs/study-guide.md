@@ -37,7 +37,7 @@ Three windows, in this order. Practise the clicks until they are automatic.
 | **Predict** | Satelight (P4) viewer | The eight satellite fields; the reconstructed cube; one float's profile | "Eight surface fields go in, temperature at 15 depths comes out. Here is a float the model never saw." |
 | **Prove** | `dashboard/index.html` | The depth chart; switch methods on and off; the analog finder with Cyclone Mocha | "This is the evidence: every method on the same floats, with hypothesis tests." |
 
-If anything fails on the day, play the backup video and keep talking over it.
+Record a screen video of this demo beforehand (Windows: Win + Alt + R starts and stops a recording). If anything fails on the day, play it and keep talking over it.
 
 ---
 

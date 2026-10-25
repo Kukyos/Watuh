@@ -268,67 +268,67 @@
     "method": "polynomial",
     "setting": 3,
     "val_rmse_mean": 0.6798,
-    "seconds": 88.0
+    "seconds": 222.2
    },
    {
     "method": "knn",
     "setting": 5,
     "val_rmse_mean": 0.7455,
-    "seconds": 15.6
+    "seconds": 17.0
    },
    {
     "method": "knn",
     "setting": 10,
     "val_rmse_mean": 0.7167,
-    "seconds": 15.7
+    "seconds": 17.1
    },
    {
     "method": "knn",
     "setting": 20,
     "val_rmse_mean": 0.7046,
-    "seconds": 15.8
+    "seconds": 17.2
    },
    {
     "method": "knn",
     "setting": 50,
     "val_rmse_mean": 0.7046,
-    "seconds": 16.0
+    "seconds": 17.4
    },
    {
     "method": "knn",
     "setting": 100,
     "val_rmse_mean": 0.7124,
-    "seconds": 16.5
+    "seconds": 17.9
    },
    {
     "method": "tree",
     "setting": 6,
     "val_rmse_mean": 0.8001,
-    "seconds": 8.9
+    "seconds": 9.4
    },
    {
     "method": "tree",
     "setting": 10,
     "val_rmse_mean": 0.7358,
-    "seconds": 13.5
+    "seconds": 14.5
    },
    {
     "method": "tree",
     "setting": 14,
     "val_rmse_mean": 0.7316,
-    "seconds": 16.9
+    "seconds": 17.4
    },
    {
     "method": "tree",
     "setting": 18,
     "val_rmse_mean": 0.7391,
-    "seconds": 18.4
+    "seconds": 18.2
    },
    {
     "method": "tree",
     "setting": 24,
     "val_rmse_mean": 0.7414,
-    "seconds": 18.4
+    "seconds": 18.9
    }
   ],
   "chosen": {
@@ -31294,67 +31294,6 @@
    }
   }
  },
- "recommend": {
-  "days": 5428,
-  "pcs": 30,
-  "pcs_explained_pct": 69.6,
-  "evaluation": [
-   {
-    "Strategy": "Cosine similarity on the surface (recommender)",
-    "Subsurface RMSE of recommended days (°C)": 1.182,
-    "Precision@5": 0.705,
-    "Best possible (oracle) RMSE (°C)": 1.022
-   },
-   {
-    "Strategy": "Same calendar date, another year",
-    "Subsurface RMSE of recommended days (°C)": 1.405,
-    "Precision@5": 0.313,
-    "Best possible (oracle) RMSE (°C)": 1.022
-   },
-   {
-    "Strategy": "Random day",
-    "Subsurface RMSE of recommended days (°C)": 1.935,
-    "Precision@5": 0.048,
-    "Best possible (oracle) RMSE (°C)": 1.022
-   }
-  ],
-  "beats_calendar_pct_of_days": 84.6,
-  "within_2023_2024": {
-   "Surface PCA (30)": 1.285,
-   "Satelight embedding (192)": 1.455,
-   "Random day (outside ±30)": 1.968
-  },
-  "mocha_example": {
-   "query": "2023-05-09",
-   "analogs": [
-    {
-     "recommended day": "2021-04-26",
-     "cosine similarity": "0.858",
-     "subsurface RMSE (°C)": "1.246"
-    },
-    {
-     "recommended day": "2020-05-06",
-     "cosine similarity": "0.85",
-     "subsurface RMSE (°C)": "1.232"
-    },
-    {
-     "recommended day": "2021-04-25",
-     "cosine similarity": "0.85",
-     "subsurface RMSE (°C)": "1.262"
-    },
-    {
-     "recommended day": "2021-04-13",
-     "cosine similarity": "0.844",
-     "subsurface RMSE (°C)": "1.262"
-    },
-    {
-     "recommended day": "2021-04-24",
-     "cosine similarity": "0.844",
-     "subsurface RMSE (°C)": "1.294"
-    }
-   ]
-  }
- },
  "prove": {
   "floats": 112,
   "test_A": [
@@ -32047,6 +31986,67 @@
    "levels_rejected_by_qc": 1172,
    "casts_with_any_rejected_level": 289,
    "source_files": 6144
+  }
+ },
+ "recommend": {
+  "days": 5428,
+  "pcs": 30,
+  "pcs_explained_pct": 69.6,
+  "evaluation": [
+   {
+    "Strategy": "Cosine similarity on the surface (recommender)",
+    "Subsurface RMSE of recommended days (°C)": 1.182,
+    "Precision@5": 0.705,
+    "Best possible (oracle) RMSE (°C)": 1.022
+   },
+   {
+    "Strategy": "Same calendar date, another year",
+    "Subsurface RMSE of recommended days (°C)": 1.405,
+    "Precision@5": 0.313,
+    "Best possible (oracle) RMSE (°C)": 1.022
+   },
+   {
+    "Strategy": "Random day",
+    "Subsurface RMSE of recommended days (°C)": 1.935,
+    "Precision@5": 0.048,
+    "Best possible (oracle) RMSE (°C)": 1.022
+   }
+  ],
+  "beats_calendar_pct_of_days": 84.6,
+  "within_2023_2024": {
+   "Surface PCA (30)": 1.285,
+   "Satelight embedding (192)": 1.455,
+   "Random day (outside ±30)": 1.968
+  },
+  "mocha_example": {
+   "query": "2023-05-09",
+   "analogs": [
+    {
+     "recommended day": "2021-04-26",
+     "cosine similarity": "0.858",
+     "subsurface RMSE (°C)": "1.246"
+    },
+    {
+     "recommended day": "2020-05-06",
+     "cosine similarity": "0.85",
+     "subsurface RMSE (°C)": "1.232"
+    },
+    {
+     "recommended day": "2021-04-25",
+     "cosine similarity": "0.85",
+     "subsurface RMSE (°C)": "1.262"
+    },
+    {
+     "recommended day": "2021-04-13",
+     "cosine similarity": "0.844",
+     "subsurface RMSE (°C)": "1.262"
+    },
+    {
+     "recommended day": "2021-04-24",
+     "cosine similarity": "0.844",
+     "subsurface RMSE (°C)": "1.294"
+    }
+   ]
   }
  }
 }
