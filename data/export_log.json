@@ -1,0 +1,16 @@
+{
+ "source": "Satelight working copy, read only",
+ "seed": 2026,
+ "cells_per_day": 40,
+ "sample_rows": 217120,
+ "casts": 6144,
+ "days": 5428,
+ "surface_columns_kept": 8033,
+ "subsurface_columns_kept": 518,
+ "glorys_check": {
+  "compared": 91607,
+  "mismatched": 0,
+  "max_abs_diff": 0.0004999923706048293,
+  "edge_casts_moved": 15
+ }
+}

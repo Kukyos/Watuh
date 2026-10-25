@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VVater results</title>
+<style>
+:root {
+  color-scheme: light;
+  --paper: #f6f7f5;
+  --panel: #ffffff;
+  --ink: #15212c;
+  --ink-2: #4b5864;
+  --ink-3: #7b8792;
+  --rule: #dde2e5;
+  --deep: #e0702c;          /* Satelight (deep learning) */
+  --course-1: #9ec5f4;      /* course methods, simplest → most flexible */
+  --course-2: #6da7ec;
+  --course-3: #3987e5;
+  --course-4: #1c5cab;
+  --course-5: #0d366b;
+  --clim: #9aa3ad;
+  --ceiling: #15212c;
+  --bay: #e0702c;
+  --arabian: #2a78d6;
+  --good: #2e8b57;
+  --bad: #c0392b;
+  --display: "Bahnschrift", "DIN Alternate", "Roboto Condensed", "Segoe UI", sans-serif;
+  --prose: Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--display); font-size: 16px; line-height: 1.4; }
+a { color: inherit; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--arabian); outline-offset: 2px; }
+
+/* the depth rail */
+.rail { position: fixed; inset: 0 auto 0 0; width: 92px; padding: 28px 0 28px 18px; z-index: 5; }
+.rail .column { position: absolute; left: 18px; top: 28px; bottom: 28px; width: 12px; border-radius: 6px;
+  background: linear-gradient(to bottom, #e4562f 0%, #ec8a3c 6%, #f1b765 11%, #8fb7d4 20%, #4f7fa8 32%, #2c4f78 55%, #1a2f4d 80%, #101d33 100%); }
+.rail .marker { position: absolute; left: 12px; width: 24px; height: 2px; background: var(--ink); transition: top .15s linear; }
+.rail nav { position: absolute; left: 40px; top: 28px; bottom: 28px; width: 0; }
+.rail nav a { position: absolute; left: 0; transform: translateY(-50%); white-space: nowrap; font-size: 12px; color: var(--ink-3); text-decoration: none; padding: 2px 4px; }
+.rail nav a.on { color: var(--ink); font-weight: 600; }
+.rail nav a:hover { color: var(--ink); }
+
+main { margin-left: 210px; max-width: 1120px; padding: 40px 40px 120px 0; }
+header.top { padding: 8px 0 18px; }
+.brand { font-size: 15px; color: var(--ink-2); letter-spacing: .02em; }
+.brand b { color: var(--ink); font-weight: 600; }
+h1 { font-weight: 300; font-size: clamp(34px, 4.6vw, 58px); line-height: 1.02; margin: 14px 0 10px; max-width: 16ch; letter-spacing: -.01em; }
+h2 { font-weight: 300; font-size: clamp(26px, 3vw, 38px); line-height: 1.1; margin: 0 0 8px; max-width: 26ch; }
+.answer { font-family: var(--prose); font-size: 19px; line-height: 1.55; max-width: 62ch; color: var(--ink); margin: 0 0 22px; }
+.note { font-family: var(--prose); font-size: 15px; line-height: 1.6; max-width: 70ch; color: var(--ink-2); }
+section { padding: 72px 0 24px; border-top: 1px solid var(--rule); }
+section.hero { border-top: none; padding-top: 0; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin: 4px 0 14px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--panel); }
+.seg button { border: 0; background: none; padding: 7px 13px; cursor: pointer; font-size: 14px; color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--rule); background: var(--panel); border-radius: 999px; padding: 5px 11px 5px 9px; cursor: pointer; font-size: 13.5px; color: var(--ink-2); }
+.chip i { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+.chip[aria-pressed="false"] { opacity: .45; }
+.chip[aria-pressed="false"] i { background: var(--rule) !important; }
+
+.grid2 { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.grid2.even { grid-template-columns: 1fr 1fr; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; }
+.panel h3 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
+.panel .sub { font-size: 13px; color: var(--ink-3); margin: 0 0 8px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+.axis text { font-family: var(--display); font-size: 12px; fill: var(--ink-3); font-stretch: condensed; }
+.axis path, .axis line { stroke: var(--rule); }
+.gridline line { stroke: #eef1f2; }
+.axis-title { font-size: 12.5px; fill: var(--ink-2); }
+
+.tip { position: fixed; pointer-events: none; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 9px 11px; font-size: 13px; box-shadow: 0 6px 18px rgba(21,33,44,.12); opacity: 0; transition: opacity .08s; z-index: 20; min-width: 180px; }
+.tip b { display: block; margin-bottom: 4px; }
+.tip .row { display: flex; justify-content: space-between; gap: 14px; }
+.tip .row span:first-child { display: inline-flex; gap: 6px; align-items: center; color: var(--ink-2); }
+.tip i { width: 10px; height: 3px; border-radius: 2px; display: inline-block; }
+
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--rule); border-radius: 10px; background: var(--panel); margin: 6px 0 22px; }
+.stat { padding: 16px 18px; border-left: 1px solid var(--rule); }
+.stat:first-child { border-left: 0; }
+.stat .v { font-size: 34px; font-weight: 300; line-height: 1; }
+.stat .v small { font-size: 16px; color: var(--ink-2); margin-left: 3px; }
+.stat .l { font-family: var(--prose); font-size: 14px; color: var(--ink-2); margin-top: 8px; line-height: 1.45; }
+
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: right; padding: 7px 8px; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+th { font-weight: 600; color: var(--ink-2); font-size: 12.5px; }
+tbody tr { cursor: default; }
+tbody tr.sel { background: #eef4fb; }
+tbody tr.pick { cursor: pointer; }
+tbody tr.pick:hover { background: #f3f6f8; }
+.best { font-weight: 600; }
+
+.cm { display: grid; grid-template-columns: auto 1fr 1fr; gap: 3px; font-size: 13px; max-width: 360px; }
+.cm div { padding: 12px 8px; text-align: center; border-radius: 6px; }
+.cm .h { color: var(--ink-3); padding: 4px; }
+.cm .cell b { display: block; font-size: 22px; font-weight: 400; }
+
+.analog-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 0 0 14px; }
+.analog-form input { border: 1px solid var(--rule); border-radius: 8px; padding: 7px 10px; background: var(--panel); }
+.analog-form button.link { border: 1px solid var(--rule); background: var(--panel); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+.analogs { list-style: none; padding: 0; margin: 0; }
+.analogs li { display: grid; grid-template-columns: 150px 1fr 1fr; gap: 12px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--rule); font-size: 14px; }
+.analogs .bar { height: 8px; border-radius: 4px; background: var(--rule); position: relative; }
+.analogs .bar span { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+.analogs .lab { font-size: 12px; color: var(--ink-3); }
+footer { margin-top: 80px; font-family: var(--prose); font-size: 14px; color: var(--ink-2); max-width: 75ch; }
+
+@media (max-width: 900px) {
+  .rail { display: none; }
+  main { margin-left: 0; padding: 24px 16px 80px; }
+  .grid2, .grid2.even { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr; }
+  .stat { border-left: 0; border-top: 1px solid var(--rule); }
+  .stat:first-child { border-top: 0; }
+  .analogs li { grid-template-columns: 1fr; gap: 4px; }
+}
+</style>
+</head>
+<body>
+<aside class="rail" aria-label="Sections">
+  <div class="column"></div>
+  <div class="marker"></div>
+  <nav></nav>
+</aside>
+
+<main>
+  <header class="top"><div class="brand"><b>VVater</b>, the ocean below the surface. Results dashboard</div></header>
+
+  <section class="hero" id="see-deep" data-rail="Prediction">
+    <h1>How far down can a satellite see?</h1>
+    <p class="answer" id="hero-answer"></p>
+    <div class="controls">
+      <div class="seg" id="region" role="group" aria-label="Region"></div>
+      <div class="chips" id="methods" role="group" aria-label="Methods shown"></div>
+    </div>
+    <div class="grid2">
+      <div class="panel"><h3>Error at each depth against held-out Argo floats, 2023–2024</h3>
+        <p class="sub">RMSE in °C, lower is better. Hover for every value at a depth.</p>
+        <svg id="depth-chart" viewBox="0 0 640 560" role="img" aria-label="RMSE by depth for each method"></svg></div>
+      <div class="panel"><h3>Share of the gap closed</h3>
+        <p class="sub">0% is climatology (the long-term average), 100% is GLORYS (the reanalysis these floats were fed into).</p>
+        <svg id="gap-chart" viewBox="0 0 420 420"></svg>
+        <p class="note" id="gap-note"></p></div>
+    </div>
+  </section>
+
+  <section id="real" data-rail="Is it real?">
+    <h2>Is the difference real, or luck?</h2>
+    <p class="answer" id="real-answer"></p>
+    <div class="controls"><div class="seg" id="test-pick" role="group" aria-label="Test"></div></div>
+    <div class="grid2">
+      <div class="panel"><h3 id="test-title"></h3>
+        <p class="sub">Difference in RMSE with a 95% confidence interval from a bootstrap over floats. Filled: significant after Holm correction.</p>
+        <svg id="test-chart" viewBox="0 0 620 520"></svg></div>
+      <div><p class="note">Each float reports every ten days along a slowly drifting path, so its measurements are not independent. The tests therefore treat the <em>float</em> as the unit of evidence: per-float average errors go into a paired t-test, and the confidence interval comes from resampling whole floats 2,000 times.</p>
+        <p class="note">Testing 15 depths at once raises the chance of a false discovery, so every p-value is adjusted with Holm’s method before it is compared with 0.05.</p>
+        <table id="test-table"></table></div>
+    </div>
+  </section>
+
+  <section id="fair" data-rail="Fair?">
+    <h2>Does it serve both seas equally?</h2>
+    <p class="answer" id="fair-answer"></p>
+    <div class="controls"><div class="seg" id="fair-pick" role="group" aria-label="Model"></div></div>
+    <div class="grid2">
+      <div class="panel"><h3>Skill against climatology, by sea</h3>
+        <p class="sub">1 − MSE(model) / MSE(climatology). 0 is no better than the average, 1 is perfect.</p>
+        <svg id="fair-chart" viewBox="0 0 620 520"></svg></div>
+      <div><div class="panel"><h3>Who is in the data</h3><table id="rep-table"></table></div>
+        <p class="note">Raw error would be unfair to the Bay of Bengal: its thermocline is sharper, so every method, even the average, misses by more there. Skill measures each sea against what the average achieves in that same sea.</p></div>
+    </div>
+  </section>
+
+  <section id="fuel" data-rail="Cyclone fuel">
+    <h2>Can satellites spot cyclone fuel?</h2>
+    <p class="answer" id="fuel-answer"></p>
+    <div class="grid2 even">
+      <div class="panel"><h3>Every classifier on the held-out floats</h3>
+        <p class="sub">Click a row to see its confusion matrix. Fuel means TCHP ≥ 50 kJ/cm².</p>
+        <table id="fuel-table"></table></div>
+      <div class="panel"><h3>ROC curves</h3><p class="sub">Higher and further left is better. The diagonal is guessing.</p>
+        <svg id="roc-chart" viewBox="0 0 440 400"></svg></div>
+    </div>
+    <div class="grid2 even" style="margin-top:22px">
+      <div class="panel"><h3 id="cm-title"></h3><p class="sub">Rows: what the float measured. Columns: what the model said.</p><div class="cm" id="cm"></div></div>
+      <div><p class="note" id="fuel-note"></p></div>
+    </div>
+  </section>
+
+  <section id="types" data-rail="Water types">
+    <h2>What kinds of water are there?</h2>
+    <p class="answer" id="types-answer"></p>
+    <div class="controls"><div class="seg" id="cluster-pick" role="group" aria-label="Clustering method"></div></div>
+    <div class="grid2 even">
+      <div class="panel"><h3>Mean profile of each cluster</h3><p class="sub">Shaded: the middle 80% of floats in the cluster.</p>
+        <svg id="cluster-profiles" viewBox="0 0 440 460"></svg></div>
+      <div class="panel"><h3>Where each k-means cluster was measured</h3><p class="sub">The algorithm never saw a position: every dot is one float profile.</p>
+        <svg id="cluster-map" viewBox="0 0 480 300"></svg>
+        <table id="cluster-table" style="margin-top:12px"></table></div>
+    </div>
+  </section>
+
+  <section id="twins" data-rail="Twin days">
+    <h2>Find the days when the ocean looked like this</h2>
+    <p class="answer" id="twins-answer"></p>
+    <div class="grid2">
+      <div class="panel">
+        <div class="analog-form">
+          <label for="qday">Day</label>
+          <input type="date" id="qday" min="2023-01-01" max="2024-12-15" value="2023-05-09">
+          <button class="link" data-day="2023-05-09">Cyclone Mocha forms</button>
+          <button class="link" data-day="2023-06-06">Cyclone Biparjoy forms</button>
+          <button class="link" data-day="2024-01-15">Mid-winter</button>
+        </div>
+        <ul class="analogs" id="analogs"></ul>
+      </div>
+      <div class="panel"><h3>Does surface similarity hold below the surface?</h3>
+        <p class="sub">Average RMSE between the query day’s 50–200 m temperature and the recommended days’, 2023–2024. Lower is better.</p>
+        <svg id="rec-chart" viewBox="0 0 420 230"></svg>
+        <p class="note" id="rec-note"></p></div>
+    </div>
+  </section>
+
+  <section id="trust" data-rail="Data quality">
+    <h2>Can the data be trusted at all?</h2>
+    <p class="answer">Before predicting anything, the raw data was checked. Bay of Bengal, July to October 2018.</p>
+    <div class="stats" id="trust-stats"></div>
+    <div class="grid2 even">
+      <div class="panel"><h3>Where the INCOIS analysis disagrees with instruments</h3><p class="sub">RMSE (°C) by depth band. The glider was not used to make the analysis.</p>
+        <svg id="trust-chart" viewBox="0 0 440 260"></svg></div>
+      <div><p class="note" id="trust-note"></p></div>
+    </div>
+  </section>
+
+  <footer>
+    Data: Argo floats (Ifremer ERDDAP), INCOIS Argo 10-day variational analysis (INCOIS ERDDAP), IOOS Glider DAC, Copernicus Marine (OSTIA, Multi-Observation SSS, DUACS, GLORYS12), NASA PO.DAAC (OSCAR), Remote Sensing Systems (CCMP). Every number on this page is read from <code>results/results.json</code>, written by the notebook that computed it.
+  </footer>
+</main>
+<div class="tip" id="tip"></div>
+
+<script src="vendor/d3.min.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+private/
+data/raw/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.env
+notebooks/build.log
+export/*.log
