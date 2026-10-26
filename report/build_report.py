@@ -36,6 +36,8 @@ MEMBERS = {
 }
 STUDENT, REG_NO, CERTIFICATE, OUT_NAME = MEMBERS[sys.argv[1] if len(sys.argv) > 1 else "armaan"]
 TEAM = [(n, r) for n, r, _, _ in MEMBERS.values()]
+HEADING_TITLES = {"INTRODUCTION", "LITERATURE REVIEW", "SYSTEM DESIGN", "IMPLEMENTATION", "TESTING AND VALIDATION",
+                  "RESULTS AND DISCUSSION", "ABSTRACT", "CONCLUSION", "REFERENCES", "APPENDICES"}
 TITLE = "VVater: Seeing the Ocean Below the Surface"
 SUBTITLE = "A data science study of predicting subsurface ocean temperature from satellite observations in the North Indian Ocean"
 FONT = "Times New Roman"
@@ -390,12 +392,11 @@ def chapter5(w):
              ["T7", "Dashboard opens offline and every figure reads results.json", "No missing value", "Verified by rendering"]],
             "Test cases and results", widths=[1.0, 7.0, 3.5, 4.0])
     w.h("5.3 Validation against the requirements")
-    w.para(f"Each objective in Section 1.3 was validated with a measurable outcome. The prediction objective was "
-           f"validated on {pts:,} measurements at 15 depths from {R['prove']['floats']} floats; the classification on "
-           f"{R['classify']['casts_labelled']:,} measured heat potentials; the recommender on every day of 2023–2024 against two "
-           f"baselines; and the statistical claims with corrected tests and confidence intervals. One defect was found "
-           f"by T2: positions stored to three decimals moved casts lying exactly on a grid-cell edge into the "
-           f"neighbouring cell. The fix assigns each such cast to the cell whose reanalysis value matches the record.")
+    w.para(f"Each objective in Section 1.3 has a measurable outcome: prediction on {pts:,} measurements at 15 depths "
+           f"from {R['prove']['floats']} floats, classification on {R['classify']['casts_labelled']:,} measured heat "
+           f"potentials, the recommender on every day of 2023–2024 against two baselines, and the statistical claims "
+           f"with corrected tests and confidence intervals. T2 found one defect: casts exactly on a grid-cell edge had "
+           f"been placed in the neighbouring cell. Each is now assigned to the cell whose reanalysis value matches.")
 
 
 def chapter6(w):
@@ -596,9 +597,7 @@ def main():
     # Chapter headings: one consistent look.
     for p in doc.paragraphs:
         t = p.text.strip()
-        if t.startswith("CHAPTER ") or t in {"INTRODUCTION", "LITERATURE REVIEW", "SYSTEM DESIGN", "IMPLEMENTATION",
-                                             "TESTING AND VALIDATION", "RESULTS AND DISCUSSION", "ABSTRACT",
-                                             "CONCLUSION", "REFERENCES", "APPENDICES"}:
+        if t.startswith("CHAPTER ") or t in HEADING_TITLES:
             set_text(p, t, size=14 if t.startswith("CHAPTER") else 16, bold=True)
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             p.paragraph_format.left_indent = None
@@ -643,6 +642,15 @@ def main():
         if t.startswith("CHAPTER "):
             p.paragraph_format.keep_with_next = True
     body[sheet_top].paragraph_format.page_break_before = True
+
+    # 3. The template's empty spacer paragraphs leave gaps under headings, and where they spill
+    #    past the end of a page they make a blank one. Drop them; headings get fixed spacing.
+    for p in body[start:sheet_top]:
+        if not p.text.strip() and not p._p.xpath(".//w:drawing") and not p.paragraph_format.page_break_before:
+            delete(p)
+    for p in doc.paragraphs:
+        if p.text.strip() in HEADING_TITLES:
+            p.paragraph_format.space_after = Pt(24)
 
     # Centred lines: the template pads some with spaces and tabs, and its list style indents
     # them, both of which push the text off centre.
