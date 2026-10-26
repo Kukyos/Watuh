@@ -16,12 +16,12 @@ Read it in this order: **the pitch**, **the demo script**, then **each chapter**
 > to a hundred metres or more, and no satellite can see that. Floats called Argo measure
 > it directly, but only at a few hundred places a month.
 >
-> My project asks: **from what a satellite sees, how well can we predict the temperature
-> down to 1,000 metres?** I answer it in three acts. **See**: I checked the raw data,
-> and found impossible values even in an official product. **Predict**: I used the
+> Our project asks: **from what a satellite sees, how well can we predict the temperature
+> down to 1,000 metres?** We answer it in three acts. **See**: we checked the raw data,
+> and found impossible values even in an official product. **Predict**: we used the
 > regression methods from our course, and a deep learning model, and scored them all on
-> measurements from 112 real Argo floats they had never seen. **Prove**: I tested whether the
-> differences are statistically real and whether the model is fair to both seas. I also
+> measurements from 112 real Argo floats they had never seen. **Prove**: we tested whether the
+> differences are statistically real and whether the model is fair to both seas. We also
 > clustered the floats into water types, built a classifier that spots cyclone fuel, and
 > made a recommender that finds days in history when the ocean looked like today.
 
@@ -29,13 +29,127 @@ Read it in this order: **the pitch**, **the demo script**, then **each chapter**
 
 ## The demo script
 
-Three windows, in this order. Practise the clicks until they are automatic.
+About ten minutes, two speakers. **A** is A M Armaan, **J** is Jerem Agsae Jebaz. Hand
+over at the lines marked ⇄, so you each speak for about half. Both of you must still be
+able to answer on *every* part: a viva question can go to either of you.
 
-| Act | Open | Show | Say |
-|---|---|---|---|
-| **See** | VVater (P3), the Amphan scenario | Cut the cube open; click a float | "This is real data in 3D. The float's QC flag is shown, and rejected readings are drawn, not hidden." |
-| **Predict** | Satelight (P4) viewer | The eight satellite fields; the reconstructed cube; one float's profile | "Eight surface fields go in, temperature at 15 depths comes out. Here is a float the model never saw." |
-| **Prove** | `dashboard/index.html` | The depth chart; switch methods on and off; the analog finder with Cyclone Mocha | "This is the evidence: every method on the same floats, with hypothesis tests." |
+**Before she arrives:** laptop charged and on mains, brightness up, notifications off
+(Focus assist). Open these tabs in this order and leave each on its starting view:
+
+1. VVater (the live site), loaded and settled.
+2. The Satelight viewer, loaded and settled.
+3. `dashboard/index.html`, scrolled to the top.
+4. The backup video, paused at 0:00, in a separate window.
+
+If a viewer will not load, do not fix it in front of her. Switch to the video at that
+act and keep talking over it.
+
+### 0 · Opening (J, 1 minute)
+
+**Show:** nothing yet; face her.
+
+**Say:** the pitch above, word for word if you like. End on: *"We'll show it in three
+acts: see it, predict it, prove it."*
+
+### 1 · See it (J, 2 minutes) · VVater
+
+**Show:** the 3D ocean. Rotate it once, cut the cube open to show the layers below the
+surface, then click one Argo float.
+
+**Say:**
+
+* "This is real ocean data, temperature at every depth, shown in 3D. The colour is
+  temperature; the surface is warm and it gets cold quickly below about 100 metres.
+  That sharp drop is the thermocline, and it is the hardest part to predict."
+* "Each pin is an Argo float. It dives to about 2,000 metres and measures on the way
+  up. Every reading carries a quality flag. We kept only flags 1 and 2, good and probably
+  good, and we counted the rejected readings rather than hiding them."
+* "Before any modelling we checked the data itself. 50.1% of the
+  grid is empty, but that is land and sea floor, so we did not fill it in. And in an
+  official gridded product we found 6 values that fail
+  the Argo range test, up to 44.42 °C at
+  100 m, which is impossible. So *see it* means: look
+  before you trust."
+
+⇄ *"Seeing the ocean is one thing. Armaan will show how we predict what we can't see."*
+
+### 2 · Predict it (A, 2 minutes) · Satelight
+
+**Show:** the eight satellite input maps, then the reconstructed 3D temperature, then
+one float's measured profile against the prediction.
+
+**Say:**
+
+* "Eight surface fields go in: sea-surface temperature, salinity, sea level (two
+  forms), two current components and two wind components. Out comes temperature at 15
+  depths, from the surface to 1,000 metres."
+* "This is a float from 2023–24. No model was trained on those years. The line is what
+  the float measured, and the other line is our prediction."
+* "We trained the course methods on 2010–2020, chose their settings on 2021–22, and
+  tested once on 2023–24. Splitting by time matters: neighbouring days are nearly
+  identical, so a random split would leak the answer."
+
+⇄ *"A prediction is only a claim. The dashboard is where we prove it."*
+
+### 3 · Prove it (A, 3 minutes) · the dashboard
+
+**Show, in this order:**
+
+1. **Prediction** (top chart). Click the method chips: switch off everything except
+   Simple linear, Polynomial and Satelight hybrid. Then toggle the region.
+   * "Error by depth, on 88829 real float measurements, the same
+     points for every method. Simple linear from SST alone is the best of all at the
+     surface, 0.42 °C, and the worst by 50 m. The
+     polynomial, from our syllabus, is level with the deep learning model on average:
+     0.843 against 0.843 °C.
+     Both close 59% of the gap
+     between the long-term average and the best ocean reanalysis."
+2. **Is it real?**
+   * "We tested that with a paired t-test per depth, a Holm correction because we ran 15
+     tests, and bootstrap intervals that resample whole floats. Satelight beats the
+     long-term average from 0 to 200 m, ties at 300–700 m, and is *worse* at 1,000 m. It
+     does not significantly beat the polynomial at 14 of 15 depths."
+3. **Fair?**
+   * "We compared skill, not raw error, because the Bay of Bengal is harder for
+     everyone. The model is more skilful in the Bay, even though the Bay has fewer
+     floats: 37 against
+     76."
+
+⇄ *"Jerem will show what else the data told us."*
+
+### 4 · Beyond prediction (J, 2 minutes) · the dashboard, continued
+
+**Show:**
+
+1. **Cyclone fuel.** "A classifier: does the ocean hold enough heat to fuel a strong
+   cyclone? All three course classifiers reach an F1 of about 0.89. Always saying
+   'yes' already gets 51% accuracy, which is why
+   we report precision, recall and F1, not accuracy alone."
+2. **Water types.** "k-means found 3 water types, with k chosen by silhouette
+   score *before* we compared them with the map. They follow place, not season."
+3. **Twin days.** Click the **Mocha** preset.
+   * "A content-based recommender: give it a day, it finds the most similar days in
+     history from the surface alone. We checked it below the surface, which it never
+     saw: its picks are 1.18 °C
+     off, against 1.41 for
+     the same date in another year and 1.94
+     for a random day. For Cyclone Mocha's first day it suggests 6 May 2020, ten days
+     before Cyclone Amphan formed. It was never told about cyclones."
+
+### 5 · Close (A, 30 seconds)
+
+**Say:** "So: we looked before we trusted, a syllabus method matched deep learning on
+average, and we proved which differences are real and where the model fails. Every
+number on screen is computed by our notebooks, and they are all in the report. Happy
+to take questions."
+
+### Things not to say
+
+* Do not call any of it a **forecast**. It reconstructs today's ocean; it does not
+  predict tomorrow's.
+* Do not say deep learning **won**. The honest line is "level on average, better in the
+  Bay, not significantly different at 14 of 15 depths".
+* Do not read numbers off this guide. Point at the screen and say them.
 
 Record a screen video of this demo beforehand (Windows: Win + Alt + R starts and stops a recording). If anything fails on the day, play it and keep talking over it.
 

@@ -28,7 +28,8 @@ R = json.loads((ROOT / "results" / "results.json").read_text(encoding="utf-8"))
 EXPORT = json.loads((ROOT / "data" / "export_log.json").read_text(encoding="utf-8"))
 
 STUDENT = "A MOHAMED ARMAAN"
-REG_NO = "[REGISTER NUMBER]"
+REG_NO = "URK24CS1021"
+TEAM = [(STUDENT, REG_NO), ("JEREM AGSAE JEBAZ", "URK24CS1030")]
 TITLE = "VVater: Seeing the Ocean Below the Surface"
 SUBTITLE = "A data science study of predicting subsurface ocean temperature from satellite observations in the North Indian Ocean"
 FONT = "Times New Roman"
@@ -573,7 +574,7 @@ def main():
             set_text(p, SUBTITLE, size=14)
             p.runs[0].italic = True
         elif t.startswith("TEAM MEMBERS NAME"):
-            set_text(p, f"{STUDENT} ({REG_NO})", size=16, bold=True)
+            set_text(p, "\n".join(f"{n} ({r})" for n, r in TEAM), size=16, bold=True)
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         elif t == "Name:":
             p.add_run(STUDENT.title()).font.size = Pt(12)
