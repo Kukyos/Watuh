@@ -645,7 +645,8 @@ def main():
     for p in doc.paragraphs:
         if p.alignment != WD_ALIGN_PARAGRAPH.CENTER or not p.text.strip():
             continue
-        p.paragraph_format.left_indent = p.paragraph_format.first_line_indent = Pt(0)
+        f = p.paragraph_format
+        f.left_indent = f.right_indent = f.first_line_indent = Pt(0)
         runs = [r for r in p.runs if not r._r.xpath("./w:br")]
         for r in runs:
             if not r.text.strip():
