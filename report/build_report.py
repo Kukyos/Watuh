@@ -640,6 +640,21 @@ def main():
             p.paragraph_format.keep_with_next = True
     body[sheet_top].paragraph_format.page_break_before = True
 
+    # Centred lines: the template pads some with spaces and tabs, and its list style indents
+    # them, both of which push the text off centre.
+    for p in doc.paragraphs:
+        if p.alignment != WD_ALIGN_PARAGRAPH.CENTER or not p.text.strip():
+            continue
+        p.paragraph_format.left_indent = p.paragraph_format.first_line_indent = Pt(0)
+        runs = [r for r in p.runs if not r._r.xpath("./w:br")]
+        for r in runs:
+            if not r.text.strip():
+                r.text = ""
+        texts = [r for r in runs if r.text]
+        if texts:
+            texts[0].text = texts[0].text.lstrip()
+            texts[-1].text = texts[-1].text.rstrip()
+
     out = PRIVATE / "VVater_DSE_Report.docx"
     doc.save(out)
     print("wrote", out)
