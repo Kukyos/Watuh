@@ -14,9 +14,10 @@ grid (about 10 GB). This script reduces them to files small enough for a laptop 
                              PCA, the subsurface (50-200 m) on a 2.5 deg grid, and
                              Satelight's daily embedding for 2023-24 (the recommender)
 
-Run with Satelight's own environment, which has the readers for its cube:
+Set SATELIGHT to the Satelight folder and run with Satelight's own Python environment,
+which has the readers for its cube:
 
-    G:/Projects/SIH26P4/.venv/Scripts/python.exe export/export_satelight.py
+    python export/export_satelight.py
 
 Nothing is written to the Satelight folder.
 """
@@ -33,7 +34,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
-P4 = Path(os.environ.get("SATELIGHT", "G:/Projects/SIH26P4"))
+P4 = Path(os.environ["SATELIGHT"])
 sys.path.insert(0, str(P4))
 from satelight import config, data  # noqa: E402
 

@@ -9,9 +9,9 @@
                                        ERDDAP for the region, with its QC flag and data mode
   data/vvater_glider.csv.gz            glider ru29 (IOOS Glider DAC), Bay of Bengal, August 2018
 
-Run with an environment that has xarray (Satelight's works):
+Set VVATER to the VVater folder and run with any environment that has xarray:
 
-    G:/Projects/SIH26P4/.venv/Scripts/python.exe export/export_vvater.py
+    python export/export_vvater.py
 """
 
 import os
@@ -20,7 +20,7 @@ from pathlib import Path
 import pandas as pd
 import xarray as xr
 
-P3 = Path(os.environ.get("VVATER", "C:/Users/Cleo/Desktop/SIH26P3")) / "data" / "cache"
+P3 = Path(os.environ["VVATER"]) / "data" / "cache"
 OUT = Path(__file__).resolve().parents[1] / "data"
 
 
