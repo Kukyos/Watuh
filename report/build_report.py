@@ -1,16 +1,18 @@
 """Fill the college report template with the project report.
 
 Reads the template and the certificate from private/ (not in the repository), every
-number from results/results.json, and the figures from figures/. Writes
-private/VVater_DSE_Report.docx.
+number from results/results.json, and the figures from figures/. One copy per team
+member, each with that member on the cover, certificate page and marks sheet:
 
-    python report/build_report.py
+    python report/build_report.py           # private/VVater_DSE_Report.docx (Armaan)
+    python report/build_report.py jerem     # private/VVater_DSE_Report_Jerem.docx
 """
 
 from __future__ import annotations
 
 import copy
 import json
+import sys
 from pathlib import Path
 
 from docx import Document
@@ -27,9 +29,13 @@ ASSETS = ROOT / "report" / "assets"
 R = json.loads((ROOT / "results" / "results.json").read_text(encoding="utf-8"))
 EXPORT = json.loads((ROOT / "data" / "export_log.json").read_text(encoding="utf-8"))
 
-STUDENT = "A MOHAMED ARMAAN"
-REG_NO = "URK24CS1021"
-TEAM = [(STUDENT, REG_NO), ("JEREM AGSAE JEBAZ", "URK24CS1030")]
+# (name, register number, certificate image in private/report_assets, output file)
+MEMBERS = {
+    "armaan": ("A MOHAMED ARMAAN", "URK24CS1021", "certificate.png", "VVater_DSE_Report.docx"),
+    "jerem": ("JEREM AGSAE JEBAZ", "URK24CS1030", "certificate_jerem.png", "VVater_DSE_Report_Jerem.docx"),
+}
+STUDENT, REG_NO, CERTIFICATE, OUT_NAME = MEMBERS[sys.argv[1] if len(sys.argv) > 1 else "armaan"]
+TEAM = [(n, r) for n, r, _, _ in MEMBERS.values()]
 TITLE = "VVater: Seeing the Ocean Below the Surface"
 SUBTITLE = "A data science study of predicting subsurface ocean temperature from satellite observations in the North Indian Ocean"
 FONT = "Times New Roman"
@@ -584,10 +590,8 @@ def main():
             delete(p)
         elif t.startswith("<<The certificate"):
             p.clear()
-            p.add_run().add_picture(str(PRIVATE / "report_assets" / "score_report.png"), width=Cm(14))
-            q = doc.add_paragraph(); q.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            q.add_run().add_picture(str(PRIVATE / "microsoft-certified-azure-data-fundamentals.1.png"), width=Cm(4.5))
-            p._p.addnext(q._p)
+            # Page 1 of each member's certificate PDF in private/, rendered at 220 dpi.
+            p.add_run().add_picture(str(PRIVATE / "report_assets" / CERTIFICATE), width=Cm(16))
 
     # Chapter headings: one consistent look.
     for p in doc.paragraphs:
@@ -656,7 +660,7 @@ def main():
             texts[0].text = texts[0].text.lstrip()
             texts[-1].text = texts[-1].text.rstrip()
 
-    out = PRIVATE / "VVater_DSE_Report.docx"
+    out = PRIVATE / OUT_NAME
     doc.save(out)
     print("wrote", out)
 
