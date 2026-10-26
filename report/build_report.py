@@ -291,8 +291,8 @@ def chapter3(w):
            "fields for a day and the temperature reconstructed beneath them, with held-out floats inside the cube for "
            "comparison (Figure 3.4). Third, prove: the results dashboard (Figure 3.5) presents the evidence from every "
            "analysis, interactively and offline.")
-    w.figure(Path("C:/Users/Cleo/Desktop/SIH26P3/docs/img/shot-hero.png"), "VVater: the Bay of Bengal cut open to 1,000 m, with Argo floats inside")
-    w.figure(Path("G:/Projects/SIH26P4/submission/figures/readme-hero.jpg"), "Satelight: satellite inputs, the reconstructed ocean, and a float profile compared")
+    w.figure(PRIVATE / "report_assets" / "vvater_viewer.png", "VVater: the Bay of Bengal cut open to 1,000 m, with Argo floats inside")
+    w.figure(PRIVATE / "report_assets" / "satelight_viewer.jpg", "Satelight: satellite inputs, the reconstructed ocean, and a float profile compared")
     w.figure(PRIVATE / "report_assets" / "dashboard.png", "The results dashboard: error at every depth for every method")
 
 
